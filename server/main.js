@@ -18,6 +18,7 @@ fastify.register(require("fastify-static"), {
 
 fastify.register(require("./plugins/database-connector"))
 fastify.register(require("./plugins/jwt-plugin"))
+fastify.register(require("./plugins/response-plugin"))
 
 fastify.decorate("config", config)
 fastify.decorate("errors", require("./errors"))

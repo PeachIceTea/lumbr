@@ -4,6 +4,7 @@ const fastifyPlugin = require("fastify-plugin")
 const jwt = require("jsonwebtoken")
 
 async function jwtPlugin(fastify, options) {
+    const err = fastify.error
     fastify.decorate("createJWT", function(id, name) {
         return jwt.sign({ id, name }, config.secret, {
             expiresIn: config.token_expiration,
@@ -11,7 +12,6 @@ async function jwtPlugin(fastify, options) {
     })
 
     fastify.decorate("requireAuth", function(req, res, next) {
-        console.log(req.headers)
         let { authorization } = req.headers
         if (authorization) {
             if (authorization && authorization.startsWith("Bearer")) {
@@ -23,21 +23,10 @@ async function jwtPlugin(fastify, options) {
                 req.user = payload
                 next()
             } catch (e) {
-                res.send({
-                    error: {
-                        errno: errors.auth_token_invalid,
-                        msg: "Provided token is invalid.",
-                    },
-                })
+                res.send(err(errors.auth_token_invalid))
             }
         } else {
-            res.send({
-                error: {
-                    errno: errors.auth_token_missing,
-                    msg:
-                        "A token is required for this route, but none was provided.",
-                },
-            })
+            res.send(err(errors.auth_token_missing))
         }
     })
 }

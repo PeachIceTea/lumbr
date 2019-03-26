@@ -5,6 +5,7 @@ module.exports = async function(fastify, options) {
     const db = fastify.mysql
     const config = fastify.config
     const errors = fastify.errors
+    const err = fastify.error
 
     fastify.get("/", async req => {
         try {
@@ -16,82 +17,49 @@ module.exports = async function(fastify, options) {
             }
         } catch (e) {
             fastify.log.error(e)
-            return {
-                error: {
-                    errno: errors.internal_server_error,
-                    msg: "Internal server error.",
-                },
-            }
+            return err(500)
         }
     })
 
     fastify.get("/:id", async req => {
         const id = req.params.id
-        if (id) {
-            if (parseInt(id)) {
-                let row
-                try {
-                    ;[[row]] = await db.execute(
-                        "SELECT userid, name, created_at FROM users WHERE userid = ?",
-                        [id]
-                    )
-                } catch (e) {
-                    fastify.log.error(e)
-                    return {
-                        error: {
-                            errno: errors.internal_server_error,
-                            msg: "Internal server error.",
-                        },
-                    }
-                }
+        if (parseInt(id)) {
+            let row
+            try {
+                ;[[row]] = await db.execute(
+                    "SELECT userid, name, created_at FROM users WHERE userid = ?",
+                    [id]
+                )
+            } catch (e) {
+                fastify.log.error(e)
+                return err(500)
+            }
 
-                if (row) {
-                    return {
-                        user: row,
-                    }
-                } else {
-                    return {
-                        error: {
-                            errno: errors.fu_userid_not_found,
-                            msg: `User with id ${id} not found`,
-                        },
-                    }
+            if (row) {
+                return {
+                    user: row,
                 }
             } else {
-                let row
-                try {
-                    ;[[row]] = await db.execute(
-                        "SELECT userid, name, created_at FROM users WHERE name = ?",
-                        [id]
-                    )
-                } catch (e) {
-                    return {
-                        error: {
-                            errno: errors.fu_userid_not_found,
-                            msg: `User with id ${id} not found`,
-                        },
-                    }
-                }
-
-                if (row) {
-                    return {
-                        user: row,
-                    }
-                } else {
-                    return {
-                        error: {
-                            errno: fu_username_not_found,
-                            msg: `User ${id} not found`,
-                        },
-                    }
-                }
+                return err(errors.fu_userid_not_found)
             }
         } else {
-            return {
-                error: {
-                    errno: errors.fu_information_missing,
-                    msg: "Information missing",
-                },
+            let row
+            try {
+                ;[[row]] = await db.execute(
+                    "SELECT userid, name, created_at FROM users WHERE name = ?",
+                    [id]
+                )
+            } catch (e) {
+                fastify.log.error(e)
+                return err(500)
+            }
+
+            if (row) {
+                return {
+                    user: row,
+                }
+            } else {
+                return err(errors.fu_username_not_found)
             }
         }
     })
@@ -121,37 +89,17 @@ module.exports = async function(fastify, options) {
                     }
                 } catch (e) {
                     if (e.errno === 1062) {
-                        return {
-                            error: {
-                                errno: errors.uc_username_taken,
-                                msg: `Username ${name} is taken.`,
-                            },
-                        }
+                        return err(errors.uc_username_taken)
                     } else {
                         fastify.log.error(e)
-                        return {
-                            error: {
-                                errno: errors.internal_server_error,
-                                msg: "Internal server error.",
-                            },
-                        }
+                        return err(500)
                     }
                 }
             } else {
-                return {
-                    error: {
-                        errno: errors.uc_information_invalid,
-                        msg: "Information invalid",
-                    },
-                }
+                return err(errors.uc_information_invalid)
             }
         } else {
-            return {
-                error: {
-                    errno: errors.uc_information_missing,
-                    msg: "Information missing.",
-                },
-            }
+            return err(errors.uc_information_missing)
         }
     })
 
@@ -166,12 +114,7 @@ module.exports = async function(fastify, options) {
                 )
             } catch (e) {
                 fastify.log.error(e)
-                return {
-                    error: {
-                        errno: errors.internal_server_error,
-                        msg: "Internal server error.",
-                    },
-                }
+                return err(500)
             }
             if (row) {
                 if (bcrypt.compareSync(password, row.password.toString())) {
@@ -184,28 +127,13 @@ module.exports = async function(fastify, options) {
                         },
                     }
                 } else {
-                    return {
-                        error: {
-                            errno: errors.ul_wrong_password,
-                            msg: "Passwords do not match.",
-                        },
-                    }
+                    return err(errors.ul_user_not_found)
                 }
             } else {
-                return {
-                    error: {
-                        errno: errors.ul_user_not_found,
-                        msg: `Cannot find user ${name}`,
-                    },
-                }
+                return err(errors.ul_user_not_found)
             }
         } else {
-            return {
-                error: {
-                    errno: errors.ul_information_missing,
-                    msg: "Information missing.",
-                },
-            }
+            return err(errors.ul_information_missing)
         }
     })
 }

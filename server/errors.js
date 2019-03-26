@@ -1,5 +1,6 @@
-module.exports = {
+const errors = {
     no_error: 0,
+    not_found: 404,
     internal_server_error: 500,
 
     uc_information_missing: 1000,
@@ -19,4 +20,17 @@ module.exports = {
     iu_file_too_large: 2403,
     iu_too_many_fields: 2404,
     iu_too_many_files: 2405,
+    iv_id_invalid: 2500,
+    iv_post_not_found: 2501,
 }
+
+;(function addReverseKeyValue() {
+    const keys = Object.keys(errors)
+    let key, val
+    for (let i = 0, len = keys.length; i < len; i++) {
+        ;(key = keys[i]), (val = errors[key])
+        errors[val] = key
+    }
+})()
+
+module.exports = errors
