@@ -1,0 +1,7 @@
+General:
+    ☐ Rework error handling to a function that is called with an error code.
+    ☐ Either copy fastifys json response structure or overwrite the 500 and 404 functions
+
+File upload:
+    ☐ Devide files into folders of 100 pictures each for better io performance
+
