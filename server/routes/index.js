@@ -3,11 +3,15 @@ module.exports = async function(fastify, options) {
     fastify.register(require("./post"), { prefix: "/post" })
 
     fastify.setNotFoundHandler((req, res) => {
-        res.send(fastify.error(404))
+        res.status(404).send(fastify.error(404))
     })
 
     fastify.setErrorHandler((e, req, res) => {
-        fastify.log.fatal(e)
-        res.send(fastify.error(500))
+        if (e.statusCode !== 500) {
+            res.send(fastify.error(e.statusCode))
+        } else {
+            fastify.log.fatal(e.statusCode)
+            res.send(fastify.error(500))
+        }
     })
 }

@@ -1,5 +1,6 @@
 const errors = {
     no_error: 0,
+    bad_request: 400,
     not_found: 404,
     internal_server_error: 500,
 
@@ -12,8 +13,8 @@ const errors = {
     auth_token_missing: 2200,
     auth_token_invalid: 2201,
     fu_information_missing: 2300,
-    fu_userid_not_found: 2301,
-    fu_username_not_found: 2302,
+    fu_user_not_found: 2302,
+    fu_no_posts_found: 2303,
     iu_upload_error: 2400,
     iu_file_handling_error: 2401,
     iu_no_image: 2402,
@@ -22,6 +23,7 @@ const errors = {
     iu_too_many_files: 2405,
     iv_id_invalid: 2500,
     iv_post_not_found: 2501,
+    pc_content_missing: 2600,
 }
 
 ;(function addReverseKeyValue() {

@@ -23,44 +23,42 @@ module.exports = async function(fastify, options) {
 
     fastify.get("/:id", async req => {
         const id = req.params.id
-        if (parseInt(id)) {
-            let row
-            try {
-                ;[[row]] = await db.execute(
-                    "SELECT userid, name, created_at FROM users WHERE userid = ?",
-                    [id]
-                )
-            } catch (e) {
-                fastify.log.error(e)
-                return err(500)
-            }
+        let query = "SELECT userid, name, created_at FROM users WHERE "
+        if (Number(id)) {
+            query += "userid = ?"
+        } else {
+            query += "name = ?"
+        }
 
-            if (row) {
-                return {
-                    user: row,
-                }
-            } else {
-                return err(errors.fu_userid_not_found)
+        let row
+        try {
+            ;[[[row]], [posts], [comments]] = await Promise.all([
+                db.execute(query, [id]),
+                getUserPosts(id, 5),
+                getUserComments(id, 5),
+            ])
+        } catch (e) {
+            fastify.log.error(e)
+            return err(500)
+        }
+
+        if (row) {
+            Object.assign(row, { posts, comments })
+            return {
+                user: row,
             }
         } else {
-            let row
-            try {
-                ;[[row]] = await db.execute(
-                    "SELECT userid, name, created_at FROM users WHERE name = ?",
-                    [id]
-                )
-            } catch (e) {
-                fastify.log.error(e)
-                return err(500)
-            }
+            return err(errors.fu_user_not_found)
+        }
+    })
 
-            if (row) {
-                return {
-                    user: row,
-                }
-            } else {
-                return err(errors.fu_username_not_found)
-            }
+    fastify.get("/:id/posts", async req => {
+        try {
+            const posts = await getUserPosts(id, 10)
+            return { posts }
+        } catch (e) {
+            fastify.log.error(e)
+            return err(500)
         }
     })
 
@@ -136,4 +134,37 @@ module.exports = async function(fastify, options) {
             return err(errors.ul_information_missing)
         }
     })
+
+    async function getUserComments(id, limit) {
+        let query =
+            "SELECT comments.*, users.name FROM comments JOIN users ON comments.userid WHERE "
+        if (Number(id)) {
+            query += "comments.userid = ? "
+        } else {
+            query += "users.name = ? "
+        }
+
+        if (limit) {
+            query += "LIMIT " + limit
+        }
+
+        return await db.execute(query, [id])
+    }
+
+    async function getUserPosts(id, limit) {
+        let query =
+            "SELECT posts.*, users.name FROM posts JOIN users ON posts.userid = users.userid WHERE "
+
+        if (Number(id)) {
+            query += "posts.userid = ? "
+        } else {
+            query += "users.name = ? "
+        }
+
+        if (limit) {
+            query += "LIMIT " + limit
+        }
+
+        return await db.execute(query, [id])
+    }
 }

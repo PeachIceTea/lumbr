@@ -35,24 +35,28 @@ module.exports = async function(fastify, options) {
     })
 
     fastify.get("/:id", async req => {
-        if (parseInt(req.params.id)) {
+        const id = req.params.id
+        if (Number(id)) {
             try {
-                const [[row]] = await db.execute(
-                    "SELECT * FROM posts WHERE postid = ?",
-                    [req.params.id]
-                )
+                const [[[row]], [comments]] = await Promise.all([
+                    db.execute("SELECT * FROM posts WHERE postid = ?", [id]),
+                    getCommentsForPost(id),
+                ])
 
                 if (row) {
-                    return { post: row }
+                    row.comments = comments
+                    return {
+                        post: row,
+                    }
                 } else {
-                    return err(iv_post_not_found)
+                    return err(errors.iv_post_not_found)
                 }
             } catch (e) {
                 fastify.log.error(e)
                 return err(500)
             }
         } else {
-            return err(iv_id_invalid)
+            return err(errors.iv_id_invalid)
         }
     })
 
@@ -123,6 +127,87 @@ module.exports = async function(fastify, options) {
             }
         }
     )
+
+    // Comments
+    fastify.get("/:id/comment", async req => {
+        const id = req.params.id
+        if (Number(id)) {
+            try {
+                const [comments] = await getCommentsForPost(id)
+                return {
+                    comments,
+                }
+            } catch (e) {
+                fastify.log.error(e)
+                return err(500)
+            }
+        } else {
+            return err(iv_id_invalid)
+        }
+    })
+
+    fastify.get("/:id/comment/:cid", async req => {
+        const { id, cid } = req.params
+        if (Number(id) && Number(cid)) {
+            try {
+                const [[comment]] = await db.execute(
+                    "SELECT comments.*, users.name FROM comments JOIN users ON comments.userid = users.userid WHERE comments.postid = ? ORDER BY comments.commentid LIMIT 1 OFFSET ?",
+                    [id, cid - 1]
+                )
+
+                return {
+                    comment,
+                }
+            } catch (e) {
+                fastify.log.error(e)
+                return err(500)
+            }
+        } else {
+            return err(iv_id_invalid) //TODO create a better errcode maybe
+        }
+    })
+
+    fastify.post(
+        "/:id/comment/new",
+        {
+            preHandler: fastify.requireAuth,
+        },
+        async req => {
+            const id = req.params.id
+            if (Number(id)) {
+                const { content } = req.body
+                if (content) {
+                    try {
+                        const [info] = await db.execute(
+                            "INSERT INTO comments (content, postid, userid) VALUES (?, ?, ?)",
+                            [content, id, req.user.id]
+                        )
+                        return {
+                            id: info.insertId,
+                        }
+                    } catch (e) {
+                        fastify.log.error(e)
+                        return err(500)
+                    }
+                } else {
+                    return err(errors.pc_content_missing)
+                }
+            } else {
+                return err(iv_id_invalid)
+            }
+        }
+    )
+
+    async function getCommentsForPost(id, limit) {
+        let query =
+            "SELECT comments.*, users.name FROM comments JOIN users ON comments.userid = users.userid WHERE comments.postid = ?"
+
+        if (limit) {
+            query += " LIMIT " + limit
+        }
+
+        return await db.execute(query, [id])
+    }
 }
 
 function handleError(e) {
