@@ -13,7 +13,7 @@ CREATE TABLE users (
 
 CREATE TABLE posts (
     postid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    path VARCHAR(255) NOT NULL,
+    fileid VARCHAR(255) NOT NULL,
     userid INT UNSIGNED NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
     PRIMARY KEY (postid),

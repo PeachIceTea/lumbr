@@ -3,3 +3,7 @@ dist
 .vscode
 
 yarn-error.log
+
+uploads/originals/*.jpg
+uploads/resized/*.jpg
+uploads/thumbs/*.jpg

@@ -1,12 +1,19 @@
 {
     "dependencies": {
         "bcrypt": "^3.0.5",
+        "concat-stream": "^2.0.0",
         "fastify": "^2.1.0",
+        "fastify-multipart": "^0.7.0",
         "fastify-plugin": "^1.5.0",
+        "fastify-static": "^2.3.4",
+        "gm": "^1.23.1",
+        "jimp": "^0.6.0",
         "jsonwebtoken": "^8.5.1",
         "mysql2": "^1.6.5",
+        "nanoid": "^2.0.1",
         "nodemon": "^1.18.10",
-        "pino-pretty": "^2.5.0"
+        "pino-pretty": "^2.5.0",
+        "sharp": "^0.22.0"
     },
     "scripts": {
         "dev": "nodemon server/main.js"

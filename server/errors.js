@@ -13,4 +13,10 @@ module.exports = {
     fu_information_missing: 2300,
     fu_userid_not_found: 2301,
     fu_username_not_found: 2302,
+    iu_upload_error: 2400,
+    iu_file_handling_error: 2401,
+    iu_no_image: 2402,
+    iu_file_too_large: 2403,
+    iu_too_many_fields: 2404,
+    iu_too_many_files: 2405,
 }
