@@ -2,14 +2,14 @@ General:
     ✔ Rework error handling to a function that is called with an error code. @high @started(19-03-26 12:36) @done(19-03-26 13:06) @lasted(30m17s)
     ✔ Either copy fastifys json response structure or overwrite the 500 and 404 functions @started(19-03-26 13:10) @done(19-03-26 13:14) @lasted(4m11s)
     ✔ Turn parseInt() into Number() for performance reasons (https://jsperf.com/parseint-vs-number/16) @started(19-03-26 13:59) @done(19-03-26 14:00) @lasted(1m54s)
+    ☐ Rename row/rows variables to what they actually represent
+    ☐ Continue in try rather than only assigning variable there
+    ☐ Don't return error code if an empty row is returned
 
 Users:
     /user/:id route:
         ✔ List latest posts @started(19-03-26 13:44) @done(19-03-26 13:51) @lasted(7m11s)
         ✔ List latest comments @done(19-03-26 14:40)
-        ☐ Rename row/rows variables to what they actually represent
-        ☐ Continue in try rather than only assigning variable there
-        ☐ Don't return error code if an empty row is returned
         ☐ List latest favorites
 
     General:
