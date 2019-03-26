@@ -4,6 +4,7 @@ dist
 
 yarn-error.log
 
-uploads/originals/*.jpg
-uploads/resized/*.jpg
-uploads/thumbs/*.jpg
+uploads/originals/*
+uploads/resized/*
+uploads/thumbs/*
+!.gitkeep
