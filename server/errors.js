@@ -24,6 +24,7 @@ const errors = {
     iv_id_invalid: 2500,
     iv_post_not_found: 2501,
     pc_content_missing: 2600,
+    pc_type_missing: 2601,
 }
 
 ;(function addReverseKeyValue() {

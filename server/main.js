@@ -1,6 +1,7 @@
 const config = require("./config")
 const path = require("path")
 const fastify = require("fastify")({
+    ignoreTrailingSlash: true,
     logger: {
         prettyPrint: true,
     },

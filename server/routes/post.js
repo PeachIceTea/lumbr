@@ -60,6 +60,40 @@ module.exports = async function(fastify, options) {
         }
     })
 
+    const voteEnum = ["favorite", "up", "down"]
+    fastify.post(
+        "/:id/vote",
+        {
+            preHandler: fastify.requireAuth,
+        },
+        async req => {
+            const id = req.params.id,
+                type = req.body.type
+            if (Number(id)) {
+                if (type && voteEnum.includes(type)) {
+                    try {
+                        const [info] = await db.execute(
+                            "INSERT INTO votes (type, postid, userid) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE type = ?",
+                            [type, id, req.user.id, type]
+                        )
+
+                        return {
+                            id: info.insertId,
+                            type,
+                        }
+                    } catch (e) {
+                        fastify.log.error(e)
+                        return err(500)
+                    }
+                } else {
+                    return err(errors.pc_type_missing)
+                }
+            } else {
+                return err(errors.iv_id_invalid)
+            }
+        }
+    )
+
     fastify.post(
         "/new",
         {

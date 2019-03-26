@@ -10,19 +10,19 @@ Users:
     /user/:id route:
         ✔ List latest posts @started(19-03-26 13:44) @done(19-03-26 13:51) @lasted(7m11s)
         ✔ List latest comments @done(19-03-26 14:40)
-        ☐ List latest favorites
+        ✔ List latest favorites @done(19-03-26 19:43)
 
     General:
         ☐ Add blacklist for usernames ["login", "new"]
         ✔ List posts in /user/:id/posts @started(19-03-26 13:19) @done(19-03-26 13:41) @lasted(22m21s)
-        ☐ List votes in /user/:id/votes
-        ☐ List favorites in /user/:id/favorites
-        ☐ List comments in /user/:id/comments
+        ☐ List votes in /user/:id/votes @low
+        ✔ List favorites in /user/:id/favorites @done(19-03-26 19:43)
+        ✔ List comments in /user/:id/comments @done(19-03-26 19:28)
         ☐ Allow to change password
 
 Posts:
-    ☐ Add vote system
-    ☐ Add favorite system
+    ✔ Add vote system @started(19-03-26 17:48) @done(19-03-26 19:25) @lasted(1h37m34s)
+    ✔ Add favorite system @done(19-03-26 19:28)
 
     Nice to haves:
         ☐ Devide files into folders of 100 pictures each for better io performance @low
@@ -30,7 +30,7 @@ Posts:
 Comments:
     ☐ Basic implementation
         ✔ new @started(19-03-26 14:01) @done(19-03-26 14:17) @lasted(16m46s)
-        ✔ List comments @started(19-03-26 14:18) @done(19-03-26 14:29) @lasted(11m15s)
+        ✔ List comments @started(19-03-26 14:18) @done(19-03-26 19:25) @lasted(5h7m9s)
         ✔ Get specific comment in relation to post (/post/:id/comment/:cid) @done(19-03-26 14:50)
         ☐ edit
     ☐ Vote system @low

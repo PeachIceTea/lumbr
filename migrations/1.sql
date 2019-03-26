@@ -13,7 +13,7 @@ CREATE TABLE users (
 
 CREATE TABLE posts (
     postid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    fileid VARCHAR(255) NOT NULL,
+    filename VARCHAR(255) NOT NULL,
     userid INT UNSIGNED NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
     PRIMARY KEY (postid),
@@ -39,6 +39,7 @@ CREATE TABLE votes (
     userid INT UNSIGNED NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
     PRIMARY KEY (voteid),
+    CONSTRAINT post_user UNQIUE (postid, userid),
     FOREIGN KEY (postid) REFERENCES posts (postid),
     FOREIGN KEY (userid) REFERENCES users (userid)
 );
@@ -55,5 +56,6 @@ CREATE TABLE post_tags (
     postid INT UNSIGNED NOT NULL,
     tagid INT UNSIGNED NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
+    CONSTRAINT post_tag UNIQUE (postid, tagid),
     PRIMARY KEY (ptid)
 );

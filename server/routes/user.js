@@ -32,10 +32,11 @@ module.exports = async function(fastify, options) {
 
         let row
         try {
-            ;[[[row]], [posts], [comments]] = await Promise.all([
+            ;[[[row]], [posts], [comments], [favorites]] = await Promise.all([
                 db.execute(query, [id]),
                 getUserPosts(id, 5),
                 getUserComments(id, 5),
+                getUserFavorite(id, 5),
             ])
         } catch (e) {
             fastify.log.error(e)
@@ -43,7 +44,7 @@ module.exports = async function(fastify, options) {
         }
 
         if (row) {
-            Object.assign(row, { posts, comments })
+            Object.assign(row, { posts, comments, favorites })
             return {
                 user: row,
             }
@@ -59,6 +60,30 @@ module.exports = async function(fastify, options) {
         } catch (e) {
             fastify.log.error(e)
             return err(500)
+        }
+    })
+
+    fastify.get("/:id/comments", async req => {
+        try {
+            const [comments] = await getUserComments(req.params.id, 15)
+            return {
+                comments,
+            }
+        } catch (e) {
+            fastify.log.error(e)
+            return err(500)
+        }
+    })
+
+    fastify.get("/:id/favorites", async req => {
+        try {
+            const [favorites] = await getUserFavorite(req.params.id, 15)
+            return {
+                favorites,
+            }
+        } catch (e) {
+            fastify.log.error(e)
+            err(500)
         }
     })
 
@@ -134,6 +159,23 @@ module.exports = async function(fastify, options) {
             return err(errors.ul_information_missing)
         }
     })
+
+    async function getUserFavorite(id, limit) {
+        let query =
+            "SELECT votes.type, users.name, posts.* FROM votes JOIN users ON votes.userid JOIN posts ON votes.postid = posts.postid WHERE "
+
+        if (Number(id)) {
+            query += "votes.userid = ? "
+        } else {
+            query += "users.name = ? "
+        }
+
+        if (limit) {
+            query += "LIMIT " + limit
+        }
+
+        return await db.execute(query, [id])
+    }
 
     async function getUserComments(id, limit) {
         let query =
