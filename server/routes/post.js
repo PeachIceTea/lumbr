@@ -136,7 +136,7 @@ module.exports = async function(fastify, options) {
                         })
                     } catch (e) {
                         fastify.log.error(e)
-                        err(500)
+                        return err(500)
                     }
                 } else {
                     res.send(err(errno))

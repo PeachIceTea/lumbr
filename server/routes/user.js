@@ -83,7 +83,7 @@ module.exports = async function(fastify, options) {
             }
         } catch (e) {
             fastify.log.error(e)
-            err(500)
+            return err(500)
         }
     })
 
@@ -95,7 +95,7 @@ module.exports = async function(fastify, options) {
                 validators.isValidPassword(password)
             ) {
                 name = name.toLowerCase()
-                password = bcrypt.hashSync(password, config.password_rounds)
+                password = bcrypt.hash(password, config.password_rounds)
 
                 try {
                     const [info] = await db.execute(
@@ -145,7 +145,7 @@ module.exports = async function(fastify, options) {
                         msg: `User ${name} successfully logged in.`,
                         jwt: fastify.createJWT(row.userid, name),
                         user: {
-                            id: info.insertId,
+                            id: row.userid,
                             name,
                         },
                     }
@@ -159,6 +159,64 @@ module.exports = async function(fastify, options) {
             return err(errors.ul_information_missing)
         }
     })
+
+    fastify.post(
+        "/edit",
+        {
+            preHandler: fastify.requireAuth,
+        },
+        async req => {
+            const { old_password, new_password } = req.body
+            if (old_password && new_password) {
+                if (
+                    validators.isValidPassword(new_password) &&
+                    old_password !== new_password
+                ) {
+                    try {
+                        const [[user]] = await db.execute(
+                            "SELECT password FROM users WHERE userid = ?",
+                            [req.user.id]
+                        )
+
+                        if (
+                            bcrypt.compareSync(
+                                old_password,
+                                user.password.toString()
+                            )
+                        ) {
+                            try {
+                                const [info] = await db.execute(
+                                    "UPDATE users SET password = ? WHERE userid = ?",
+                                    [
+                                        await bcrypt.hash(
+                                            new_password,
+                                            config.password_rounds
+                                        ),
+                                        req.user.id,
+                                    ]
+                                )
+                                return {
+                                    password_changed: true,
+                                }
+                            } catch (e) {
+                                fastify.log.error(e)
+                                return err(500)
+                            }
+                        } else {
+                            return err(errors.ul_wrong_password)
+                        }
+                    } catch (e) {
+                        fastify.log.error(e)
+                        return err(500)
+                    }
+                } else {
+                    return err(errors.uc_information_invalid)
+                }
+            } else {
+                return err(errors.ul_information_missing)
+            }
+        }
+    )
 
     async function getUserFavorite(id, limit) {
         let query =

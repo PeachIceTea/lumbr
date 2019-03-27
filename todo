@@ -18,7 +18,7 @@ Users:
         ☐ List votes in /user/:id/votes @low
         ✔ List favorites in /user/:id/favorites @done(19-03-26 19:43)
         ✔ List comments in /user/:id/comments @done(19-03-26 19:28)
-        ☐ Allow to change password
+        ✔ Allow to change password @done(19-03-27 09:18)
 
 Posts:
     ✔ Add vote system @started(19-03-26 17:48) @done(19-03-26 19:25) @lasted(1h37m34s)
