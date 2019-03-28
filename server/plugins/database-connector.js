@@ -1,4 +1,4 @@
-const config = require("../config")
+const config = require("../../shared/config")
 const fastifyPlugin = require("fastify-plugin")
 const mysql = require("mysql2/promise")
 

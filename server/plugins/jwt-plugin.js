@@ -1,4 +1,4 @@
-const config = require("../config")
+const config = require("../../shared/config")
 const errors = require("../errors")
 const fastifyPlugin = require("fastify-plugin")
 const jwt = require("jsonwebtoken")

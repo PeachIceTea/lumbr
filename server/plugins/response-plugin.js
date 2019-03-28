@@ -1,4 +1,3 @@
-const config = require("../config")
 const errors = require("../errors")
 const fastifyPlugin = require("fastify-plugin")
 

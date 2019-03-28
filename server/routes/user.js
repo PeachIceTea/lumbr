@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt")
-const validators = require("../validators")
+const validators = require("../../shared/validators")
 
 module.exports = async function(fastify, options) {
     const db = fastify.mysql
