@@ -34,12 +34,23 @@ CREATE TABLE comments (
 
 CREATE TABLE votes (
     voteid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    type ENUM("favorite", "up", "down"),
+    type ENUM("up", "down"),
     postid INT UNSIGNED NOT NULL,
     userid INT UNSIGNED NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
     PRIMARY KEY (voteid),
-    CONSTRAINT post_user UNQIUE (postid, userid),
+    CONSTRAINT post_user UNIQUE (postid, userid),
+    FOREIGN KEY (postid) REFERENCES posts (postid),
+    FOREIGN KEY (userid) REFERENCES users (userid)
+);
+
+CREATE TABLE favorites (
+    favid INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    postid INT UNSIGNED NOT NULL,
+    userid INT UNSIGNED NOT NULL,
+    created_at TIMESTAMP DEFAULT now(),
+    PRIMARY KEY (favid),
+    CONSTRAINT post_user UNIQUE (postid, userid),
     FOREIGN KEY (postid) REFERENCES posts (postid),
     FOREIGN KEY (userid) REFERENCES users (userid)
 );

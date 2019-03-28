@@ -22,7 +22,7 @@ module.exports = async function(fastify, options) {
     fastify.get("/", async req => {
         try {
             const [rows] = await db.execute(
-                "SELECT posts.*, users.name FROM posts JOIN users ON posts.userid = users.userid LIMIT 30"
+                "SELECT posts.*, users.name AS uploader, ((SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'up') - (SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'down')) AS votes FROM posts JOIN users ON posts.userid = users.userid LIMIT 30"
             )
 
             return {
@@ -39,7 +39,10 @@ module.exports = async function(fastify, options) {
         if (Number(id)) {
             try {
                 const [[[row]], [comments]] = await Promise.all([
-                    db.execute("SELECT * FROM posts WHERE postid = ?", [id]),
+                    db.execute(
+                        "SELECT posts.*, users.name AS uploader, ((SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'up') - (SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'down')) AS votes, (SELECT COUNT(1) FROM favorites WHERE favorites.favid = posts.postid) AS favorites FROM posts JOIN users ON posts.userid = users.userid WHERE postid = ?",
+                        [id]
+                    ),
                     getCommentsForPost(id),
                 ])
 
@@ -60,7 +63,7 @@ module.exports = async function(fastify, options) {
         }
     })
 
-    const voteEnum = ["favorite", "up", "down"]
+    const voteEnum = ["up", "down"]
     fastify.post(
         "/:id/vote",
         {
