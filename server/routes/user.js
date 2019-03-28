@@ -95,7 +95,7 @@ module.exports = async function(fastify, options) {
                 validators.isValidPassword(password)
             ) {
                 name = name.toLowerCase()
-                password = bcrypt.hash(password, config.password_rounds)
+                password = await bcrypt.hash(password, config.password_rounds)
 
                 try {
                     const [info] = await db.execute(
