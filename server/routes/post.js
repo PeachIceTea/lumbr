@@ -22,7 +22,7 @@ module.exports = async function(fastify, options) {
     fastify.get("/", async req => {
         try {
             const [rows] = await db.execute(
-                "SELECT posts.*, users.name AS uploader, ((SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'up') - (SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'down')) AS votes FROM posts JOIN users ON posts.userid = users.userid LIMIT 30"
+                "SELECT posts.*, users.name AS uploader, ((SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'up') - (SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'down')) AS score, (SELECT COUNT(1) FROM favorites WHERE favorites.favid = posts.postid) AS favorites, (SELECT COUNT(1) FROM comments WHERE comments.postid = posts.postid) As comments FROM posts JOIN users ON posts.userid = users.userid LIMIT 30"
             )
 
             return {
@@ -40,7 +40,7 @@ module.exports = async function(fastify, options) {
             try {
                 const [[[row]], [comments]] = await Promise.all([
                     db.execute(
-                        "SELECT posts.*, users.name AS uploader, ((SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'up') - (SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'down')) AS votes, (SELECT COUNT(1) FROM favorites WHERE favorites.favid = posts.postid) AS favorites FROM posts JOIN users ON posts.userid = users.userid WHERE postid = ?",
+                        "SELECT posts.*, users.name AS uploader, ((SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'up') - (SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'down')) AS score, (SELECT COUNT(1) FROM favorites WHERE favorites.favid = posts.postid) AS favorites FROM posts JOIN users ON posts.userid = users.userid WHERE postid = ?",
                         [id]
                     ),
                     getCommentsForPost(id),
@@ -112,15 +112,17 @@ module.exports = async function(fastify, options) {
                     try {
                         await Promise.all([
                             image
-                                .jpeg({ quality: 100 })
+                                .jpeg({ quality: config.source_jpg_quality })
                                 .toFile(`./uploads/originals/${id}.jpg`),
 
                             image
+                                .jpeg({ quality: config.resized_jpg_quality })
                                 .resize(1280, 1280, { fit: "outside" })
                                 .toFile(`./uploads/resized/${id}.jpg`),
 
                             image
-                                .resize(400, 400, { fit: "cover" })
+                                .jpeg({ quality: config.thumb_jpg_quality })
+                                .resize(800, 800, { fit: "cover" })
                                 .toFile(`./uploads/thumbs/${id}.jpg`),
                         ])
                     } catch (e) {

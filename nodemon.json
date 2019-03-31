@@ -1,4 +1,4 @@
 {
     "ext": "js,jsx,json,vue",
-    "ignore": ["dist"]
+    "ignore": ["dist", "client"]
 }

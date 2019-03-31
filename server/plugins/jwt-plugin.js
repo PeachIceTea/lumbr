@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 
 async function jwtPlugin(fastify, options) {
     const err = fastify.error
+
     fastify.decorate("createJWT", function(id, name) {
         return jwt.sign({ id, name }, config.secret, {
             expiresIn: config.token_expiration,

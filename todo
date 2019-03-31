@@ -2,9 +2,16 @@ General:
     ✔ Rework error handling to a function that is called with an error code. @high @started(19-03-26 12:36) @done(19-03-26 13:06) @lasted(30m17s)
     ✔ Either copy fastifys json response structure or overwrite the 500 and 404 functions @started(19-03-26 13:10) @done(19-03-26 13:14) @lasted(4m11s)
     ✔ Turn parseInt() into Number() for performance reasons (https://jsperf.com/parseint-vs-number/16) @started(19-03-26 13:59) @done(19-03-26 14:00) @lasted(1m54s)
-    ☐ Rename row/rows variables to what they actually represent
+    ☐ Rename row/rows variables to what they actually represent @check
+    Should be done? Gotta check!
     ☐ Continue in try rather than only assigning variable there
     ☐ Don't return error code if an empty row is returned
+    Or atleast make sure its consitent across the api
+
+    Rework the SQL queries:
+        ☐ They should be in a central location, so that all routes reflect the same information and queries aren't copied around.
+        ☐ Rename comments to comment_count
+        Right now comments is used to indicate the amount of comments as well as acutally being an array of comments.
 
 Users:
     /user/:id route:
@@ -13,7 +20,7 @@ Users:
         ✔ List latest favorites @done(19-03-26 19:43)
 
     General:
-        ☐ Add blacklist for usernames ["login", "new"]
+        ☐ Add blacklist for usernames ["login", "new", "home"]
         ✔ List posts in /user/:id/posts @started(19-03-26 13:19) @done(19-03-26 13:41) @lasted(22m21s)
         ☐ List votes in /user/:id/votes @low
         ✔ List favorites in /user/:id/favorites @done(19-03-26 19:43)
@@ -34,3 +41,14 @@ Comments:
         ✔ Get specific comment in relation to post (/post/:id/comment/:cid) @done(19-03-26 14:50)
         ☐ edit
     ☐ Vote system @low
+
+Client:
+    ☐ Proper error handling
+    ☐ Login
+    ☐ Post creation
+    ☐ Comment creation
+
+    Optimization:
+        ☐ Investigate client side caching @low
+        The client keeps a timestamp on all data it recieves and sends requests with that timestamp.
+        The server then will only send new information to the client. Might be worth a shot.

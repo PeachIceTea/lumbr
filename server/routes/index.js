@@ -3,7 +3,7 @@ module.exports = async function(fastify, options) {
     fastify.register(require("./post"), { prefix: "/post" })
 
     fastify.setNotFoundHandler((req, res) => {
-        res.sendFile("../../dist/index.html")
+        res.status(200).send(fastify.error(404))
     })
 
     fastify.setErrorHandler((e, req, res) => {

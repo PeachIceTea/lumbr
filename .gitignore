@@ -8,3 +8,5 @@ uploads/originals/*
 uploads/resized/*
 uploads/thumbs/*
 !.gitkeep
+
+.nuxt

@@ -103,7 +103,6 @@ module.exports = async function(fastify, options) {
                         [name, password]
                     )
                     return {
-                        msg: `User ${name} successfully created.`,
                         jwt: fastify.createJWT(info.insertId, name),
                         user: {
                             id: info.insertId,
@@ -142,7 +141,6 @@ module.exports = async function(fastify, options) {
             if (row) {
                 if (bcrypt.compareSync(password, row.password.toString())) {
                     return {
-                        msg: `User ${name} successfully logged in.`,
                         jwt: fastify.createJWT(row.userid, name),
                         user: {
                             id: row.userid,
@@ -253,7 +251,7 @@ module.exports = async function(fastify, options) {
 
     async function getUserPosts(id, limit) {
         let query =
-            "SELECT posts.*, users.name FROM posts JOIN users ON posts.userid = users.userid WHERE "
+            "SELECT posts.*, users.name, ((SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'up') - (SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'down')) AS score, (SELECT COUNT(1) FROM favorites WHERE favorites.favid = posts.postid) AS favorites, (SELECT COUNT(1) FROM comments WHERE comments.postid = posts.postid) As comments FROM posts JOIN users ON posts.userid = users.userid WHERE "
 
         if (Number(id)) {
             query += "posts.userid = ? "
