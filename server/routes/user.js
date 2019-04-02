@@ -148,7 +148,7 @@ module.exports = async function(fastify, options) {
                         },
                     }
                 } else {
-                    return err(errors.ul_user_not_found)
+                    return err(errors.ul_user_not_found) //TODO maybe ul_user_passwords_dont_match?
                 }
             } else {
                 return err(errors.ul_user_not_found)
@@ -157,6 +157,16 @@ module.exports = async function(fastify, options) {
             return err(errors.ul_information_missing)
         }
     })
+
+    fastify.post(
+        "/auth",
+        {
+            preHandler: fastify.requireAuth,
+        },
+        async req => {
+            return { id: req.user.id, name: req.user.name }
+        }
+    )
 
     fastify.post(
         "/edit",

@@ -1,17 +1,23 @@
 General:
     ✔ Rework error handling to a function that is called with an error code. @high @started(19-03-26 12:36) @done(19-03-26 13:06) @lasted(30m17s)
     ✔ Either copy fastifys json response structure or overwrite the 500 and 404 functions @started(19-03-26 13:10) @done(19-03-26 13:14) @lasted(4m11s)
-    ✔ Turn parseInt() into Number() for performance reasons (https://jsperf.com/parseint-vs-number/16) @started(19-03-26 13:59) @done(19-03-26 14:00) @lasted(1m54s)
+    ✔ Turn parseInt() into Number() @started(19-03-26 13:59) @done(19-03-26 14:00) @lasted(1m54s)
+        for performance reasons (https://jsperf.com/parseint-vs-number/16)
     ☐ Rename row/rows variables to what they actually represent @check
-    Should be done? Gotta check!
+        Should be done? Gotta check!
     ☐ Continue in try rather than only assigning variable there
     ☐ Don't return error code if an empty row is returned
-    Or atleast make sure its consitent across the api
+        Or atleast make sure its consitent across the api
+    ☐ Seperate client and server dependencies
+    ✔ Add startup script for client development in package.json @done(19-04-01 13:00)
+    ☐ Validate JWT on the server side during nuxtServerInit @started(19-04-01 13:00)
+    ☐ Rework JWT strategy
+        We should have two tokens. One long running one that can be invalidated on the server side using a database and is to be used to get the second token.
 
     Rework the SQL queries:
         ☐ They should be in a central location, so that all routes reflect the same information and queries aren't copied around.
         ☐ Rename comments to comment_count
-        Right now comments is used to indicate the amount of comments as well as acutally being an array of comments.
+            Right now comments is used to indicate the amount of comments as well as acutally being an array of comments.
 
 Users:
     /user/:id route:
@@ -30,6 +36,7 @@ Users:
 Posts:
     ✔ Add vote system @started(19-03-26 17:48) @done(19-03-26 19:25) @lasted(1h37m34s)
     ✔ Add favorite system @done(19-03-26 19:28)
+    ☐ Add tag system
 
     Nice to haves:
         ☐ Devide files into folders of 100 pictures each for better io performance @low
@@ -44,11 +51,16 @@ Comments:
 
 Client:
     ☐ Proper error handling
-    ☐ Login
+    ✔ Login @done(19-04-01 13:01)
     ☐ Post creation
+    ☐ Voting
     ☐ Comment creation
+    ☐ Finish user page
+    ☐ Navigation
 
     Optimization:
+        ☐ Move all API request to its own file @maybe
+            https://codeburst.io/nuxt-authentication-from-scratch-a7a024c7201b (search for frontend/api/index.js)
         ☐ Investigate client side caching @low
-        The client keeps a timestamp on all data it recieves and sends requests with that timestamp.
-        The server then will only send new information to the client. Might be worth a shot.
+            The client keeps a timestamp on all data it recieves and sends requests with that timestamp.
+            The server then will only send new information to the client. Might be worth a shot.

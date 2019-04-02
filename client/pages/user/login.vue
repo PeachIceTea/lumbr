@@ -12,13 +12,16 @@
 import AuthForm from "~/components/auth-form"
 
 export default {
+    middleware: "notAuthenticated",
     components: { AuthForm },
     methods: {
-        login(name, password) {
-            this.$store.dispatch("users/login", { name, password })
+        async login(name, password) {
+            await this.$store.dispatch("auth/login", { name, password })
+            this.$router.push("/user/home")
         },
-        register(name, password) {
-            this.$store.dispatch("users/register", { name, password })
+        async register(name, password) {
+            await this.$store.dispatch("auth/register", { name, password })
+            this.$router.push("/user/home")
         },
     },
 }

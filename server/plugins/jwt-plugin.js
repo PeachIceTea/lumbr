@@ -24,6 +24,7 @@ async function jwtPlugin(fastify, options) {
                 req.user = payload
                 next()
             } catch (e) {
+                console.log(e)
                 res.send(err(errors.auth_token_invalid))
             }
         } else {
