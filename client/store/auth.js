@@ -9,8 +9,8 @@ export default {
         }
     },
     mutations: {
-        setuser(state, auth) {
-            state.auth = auth.user
+        setUser(state, auth) {
+            state.user = auth.user
         },
         setJWT(state, jwt) {
             state.jwt = jwt
@@ -39,7 +39,7 @@ async function auth(commit, type, payload) {
     if (!data.errno) {
         jsCookie.set("auth", data.jwt)
         commit("setJWT", data.jwt)
-        commit("setuser", data)
+        commit("setUser", data)
     } else {
         throw data
     }

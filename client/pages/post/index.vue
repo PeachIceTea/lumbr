@@ -1,5 +1,9 @@
 <template lang="pug">
     .posts-container
+        .intro
+            span Lumbr
+            br
+            nuxt-link(:to="'post/upload'") Upload a new image
         .post(v-for="post in posts")
             Thumb(:post="post")
 </template>

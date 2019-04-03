@@ -158,13 +158,18 @@ module.exports = async function(fastify, options) {
         }
     })
 
-    fastify.post(
+    fastify.get(
         "/auth",
         {
             preHandler: fastify.requireAuth,
         },
         async req => {
-            return { id: req.user.id, name: req.user.name }
+            return {
+                user: {
+                    id: req.user.id,
+                    name: req.user.name,
+                },
+            }
         }
     )
 

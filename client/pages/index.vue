@@ -1,7 +1,7 @@
 <template lang="pug">
     .index
-        .user-info
-            span Hi, {{this.$store.state.auth.user}}
+        .user-info(v-if="authenticated")
+            span Hi, {{this.$store.state.auth.user.name}}
         .navigation
             nuxt-link(to="/post") Posts
             |

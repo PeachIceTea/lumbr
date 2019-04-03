@@ -14,6 +14,9 @@ export default {
         setPost(state, post) {
             state.post = post
         },
+        addCommentToPost(state, comment) {
+            state.post.comments.push(comment)
+        },
     },
     actions: {
         async getPosts({ commit }) {
@@ -30,6 +33,24 @@ export default {
                 commit("setPost", data.post)
             } else {
                 throw data
+            }
+        },
+        async submitComment({ commit, state, rootState }, content) {
+            const { data } = await axios.post(
+                `post/${state.post.postid}/comment/new`,
+                { content }
+            )
+            if (!data.errno) {
+                commit("addCommentToPost", {
+                    content,
+                    userid: rootState.auth.user.id,
+                    name: rootState.auth.user.name,
+                    commentid: data.id,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                })
+            } else {
+                console.error(data)
             }
         },
     },

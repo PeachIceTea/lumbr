@@ -12,6 +12,11 @@
                 .comment(v-for="comment in post.comments")
                     nuxt-link.user(:to="'/user/' + comment.userid") {{comment.name}}
                     .content {{comment.content}}
+                .new-comment(v-if="authenticated")
+                    br
+                    div Write a new comment
+                    textarea.new-comment-text(v-model="newComment")
+                    input(type="submit" @click="submitComment")
             nuxt-link(:to="'/post'") Back to posts
 </template>
 
@@ -25,12 +30,26 @@ export default {
     async fetch({ store, params }) {
         await store.dispatch("posts/getPost", params.id)
     },
+    data() {
+        return {
+            newComment: "",
+        }
+    },
+    methods: {
+        async submitComment() {
+            await this.$store.dispatch("posts/submitComment", this.newComment)
+            this.newComment = ""
+        },
+    },
     computed: {
         post() {
             return this.$store.state.posts.post
         },
         address() {
             return address
+        },
+        authenticated() {
+            return !!this.$store.state.auth.jwt
         },
     },
 }
@@ -77,5 +96,10 @@ img {
     .post {
         grid-template-columns: 0.5fr 0.5fr;
     }
+}
+
+.new-comment-text {
+    width: 100%;
+    font-size: 13pt;
 }
 </style>

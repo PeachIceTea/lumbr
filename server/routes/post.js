@@ -225,8 +225,12 @@ module.exports = async function(fastify, options) {
                             id: info.insertId,
                         }
                     } catch (e) {
-                        fastify.log.error(e)
-                        return err(500)
+                        if (e.errno === 1452) {
+                            return err(errors.iv_post_not_found)
+                        } else {
+                            fastify.log.error(e)
+                            return err(500)
+                        }
                     }
                 } else {
                     return err(errors.pc_content_missing)

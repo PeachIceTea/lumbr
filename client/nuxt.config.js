@@ -12,4 +12,5 @@ export default {
             },
         ],
     },
+    plugins: [{ src: "~/plugins/register-auth", ssr: false }],
 }

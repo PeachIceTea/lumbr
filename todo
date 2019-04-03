@@ -10,7 +10,7 @@ General:
         Or atleast make sure its consitent across the api
     ☐ Seperate client and server dependencies
     ✔ Add startup script for client development in package.json @done(19-04-01 13:00)
-    ☐ Validate JWT on the server side during nuxtServerInit @started(19-04-01 13:00)
+    ✔ Validate JWT on the server side during nuxtServerInit @started(19-04-01 13:00) @done(19-04-03 20:41) @lasted(2d7h41m1s)
     ☐ Rework JWT strategy
         We should have two tokens. One long running one that can be invalidated on the server side using a database and is to be used to get the second token.
 
@@ -42,7 +42,7 @@ Posts:
         ☐ Devide files into folders of 100 pictures each for better io performance @low
 
 Comments:
-    ☐ Basic implementation
+    ✔ Basic implementation @done(19-04-03 21:26)
         ✔ new @started(19-03-26 14:01) @done(19-03-26 14:17) @lasted(16m46s)
         ✔ List comments @started(19-03-26 14:18) @done(19-03-26 19:25) @lasted(5h7m9s)
         ✔ Get specific comment in relation to post (/post/:id/comment/:cid) @done(19-03-26 14:50)
@@ -54,9 +54,13 @@ Client:
     ✔ Login @done(19-04-01 13:01)
     ☐ Post creation
     ☐ Voting
-    ☐ Comment creation
     ☐ Finish user page
     ☐ Navigation
+    ☐ Make it pretty
+
+    Comments:
+        ✔ Comment creation @started(19-04-03 20:47) @done(19-04-03 21:26) @lasted(39m47s)
+        ☐ Show when comments were created and if they were edited and when
 
     Optimization:
         ☐ Move all API request to its own file @maybe
