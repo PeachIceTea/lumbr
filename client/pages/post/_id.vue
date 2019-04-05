@@ -63,6 +63,7 @@ export default {
 .image-container {
     display: inline-block;
     object-fit: cover;
+    width: 100%;
 }
 
 .info {
@@ -89,12 +90,11 @@ img {
 
 @media only screen and (min-device-width: 768px) {
     img {
-        width: auto;
-        height: 100%;
+        height: 1fr;
     }
 
     .post {
-        grid-template-columns: 0.5fr 0.5fr;
+        grid-template-columns: 0.75fr 0.25fr;
     }
 }
 

@@ -29,6 +29,7 @@ export default {
         },
         async logout({ commit }) {
             jsCookie.remove("auth")
+            axios.removeToken()
             commit("logout")
         },
     },
@@ -38,6 +39,7 @@ async function auth(commit, type, payload) {
     const { data } = await axios.post(`user/${type}`, payload)
     if (!data.errno) {
         jsCookie.set("auth", data.jwt)
+        axios.setToken(data.jwt)
         commit("setJWT", data.jwt)
         commit("setUser", data)
     } else {

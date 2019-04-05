@@ -30,6 +30,6 @@ fastify.decorate("errors", require("./errors"))
 
 fastify.register(require("./routes"))
 
-fastify.listen(config.port, config.host, function(err, address) {
+fastify.listen(config.port, function(err, address) {
     if (err) throw err
 })

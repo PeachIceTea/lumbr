@@ -22,7 +22,7 @@ module.exports = async function(fastify, options) {
     fastify.get("/", async req => {
         try {
             const [rows] = await db.execute(
-                "SELECT posts.*, users.name AS uploader, ((SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'up') - (SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'down')) AS score, (SELECT COUNT(1) FROM favorites WHERE favorites.favid = posts.postid) AS favorites, (SELECT COUNT(1) FROM comments WHERE comments.postid = posts.postid) As comments FROM posts JOIN users ON posts.userid = users.userid LIMIT 30"
+                "SELECT posts.*, users.name AS uploader, ((SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'up') - (SELECT COUNT(1) FROM votes WHERE votes.postid = posts.postid AND type = 'down')) AS score, (SELECT COUNT(1) FROM favorites WHERE favorites.favid = posts.postid) AS favorites, (SELECT COUNT(1) FROM comments WHERE comments.postid = posts.postid) As comments FROM posts JOIN users ON posts.userid = users.userid ORDER BY posts.postid DESC LIMIT 30"
             )
 
             return {

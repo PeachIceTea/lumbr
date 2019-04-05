@@ -1,6 +1,6 @@
 const config = {
     name: "lumbr",
-    host: "192.168.0.5",
+    host: "localhost",
     port: 3000,
     database_pool: {
         host: "localhost",
