@@ -1,19 +1,47 @@
-<template lang="pug">
-    .auth-form
-        form(v-on:submit.prevent="submit")
-            .input
-                label Username
-                    br
-                    input(v-model="name" :class="usernameStyle" type="text" placeholder="Username")
-            .input
-                Label Password
-                    br
-                    input(v-model="password" :class="passwordStyle" type="password" placeholder="Password")
-            input(type="submit")
+<template>
+    <div class="auth-form">
+        <div class="error" v-if="hasError">Error: {{ error.error }}</div>
+        <form @submit.prevent="submit">
+            <div class="input">
+                <div class="username">
+                    <label>
+                        Username
+                        <br />
+                        <input
+                            type="text"
+                            v-model="name"
+                            :class="usernameStyle"
+                            placeholder="Username"
+                        />
+                    </label>
+                </div>
+                <br />
+                <div class="password">
+                    <label>
+                        Password
+                        <br />
+                        <input
+                            v-model="password"
+                            :class="passwordStyle"
+                            type="password"
+                            placeholder="Password"
+                        />
+                    </label>
+                </div>
+                <br />
+                <div class="submit">
+                    <input
+                        type="submit"
+                        :disabled="!(isValidUsername && isValidPassword)"
+                    />
+                </div>
+            </div>
+        </form>
+    </div>
 </template>
 
 <script>
-import validators from "~/../shared/validators"
+import validators from "../../validators"
 
 export default {
     data() {
@@ -53,11 +81,15 @@ export default {
             this.callback(this.name, this.password)
         },
     },
-    props: ["callback"],
+    props: ["callback", "error", "hasError"],
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+.auth-form {
+    display: inline-block;
+}
+
 .input {
     margin-bottom: 0.25em;
 }

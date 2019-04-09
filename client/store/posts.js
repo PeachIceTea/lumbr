@@ -1,10 +1,11 @@
-import axios from "~/plugins/axios"
+import axios from "../axios"
 
 export default {
     state() {
         return {
             posts: [],
-            post: {},
+            post: 0,
+            error: null,
         }
     },
     mutations: {
@@ -17,12 +18,18 @@ export default {
         addCommentToPost(state, comment) {
             state.post.comments.push(comment)
         },
+        setError(state, error) {
+            state.error = error
+        },
+        clearError(state) {
+            state.error = null
+        },
     },
     actions: {
         async getPosts({ commit }) {
             const { data } = await axios.get("post")
             if (!data.errno) {
-                commit("setPosts", data.posts)
+                commit("setPosts", data)
             } else {
                 throw data
             }
@@ -30,27 +37,31 @@ export default {
         async getPost({ commit }, id) {
             const { data } = await axios.get(`post/${id}`)
             if (!data.errno) {
-                commit("setPost", data.post)
+                commit("setPost", data)
             } else {
                 throw data
             }
         },
         async submitComment({ commit, state, rootState }, content) {
             const { data } = await axios.post(
-                `post/${state.post.postid}/comment/new`,
+                `post/${state.post.id}/comment/new`,
                 { content }
             )
-            if (!data.errno) {
-                commit("addCommentToPost", {
-                    content,
-                    userid: rootState.auth.user.id,
-                    name: rootState.auth.user.name,
-                    commentid: data.id,
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                })
+            if (!data.error) {
+                commit("addCommentToPost", data)
             } else {
                 console.error(data)
+            }
+        },
+        async new({ commit }, image) {
+            const form = new FormData()
+            form.append("image", new Blob([image]))
+            const { data } = await axios.post("post/new", form)
+            if (!data.error) {
+                commit("setPost", data)
+            } else {
+                console.error(data)
+                commit("setError", data)
             }
         },
     },

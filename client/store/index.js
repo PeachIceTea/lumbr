@@ -1,6 +1,7 @@
-import axios from "~/plugins/axios"
+import axios from "../axios"
 
 const cookieparser = process.server ? require("cookieparser") : undefined
+const jsCookie = process.client ? require("js-cookie") : undefined
 
 export default {
     actions: {
@@ -11,19 +12,21 @@ export default {
                 const parsed = cookieparser.parse(req.headers.cookie)
                 if (parsed.auth) {
                     axios.setToken(parsed.auth)
-                    try {
-                        const { data } = await axios.get("user/auth")
-                        if (!data.errno) {
-                            commit("auth/setUser", data)
-                            commit("auth/setJWT", parsed.auth)
-                        }
-                    } catch (e) {
-                        console.error(e)
+                    const { data } = await axios.get("user/auth")
+                    if (!data.error) {
+                        commit("auth/login", { token: parsed.auth, user: data })
+                    } else {
+                        commit("auth/setError", "Could not confirm token")
                     }
                 }
             }
         },
-        async nuxtClientInit({ state }) {
+        nuxtClientInit({ state, commit }) {
+            if (state.auth.error) {
+                jsCookie.remove(auth)
+                commit("auth/clearError")
+            }
+
             if (state.auth.jwt) {
                 axios.setToken(state.auth.jwt)
             }

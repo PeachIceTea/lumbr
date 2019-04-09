@@ -1,8 +1,9 @@
 import axios from "axios"
-import { address } from "../../shared/config"
+import { address } from "../config"
 
 const axiosInstance = axios.create({
     baseURL: address,
+    validateStatus: false,
 })
 
 axiosInstance.setToken = function(token) {
@@ -10,7 +11,7 @@ axiosInstance.setToken = function(token) {
 }
 
 axiosInstance.removeToken = function() {
-    this.defaults.headers.authorization = undefined
+    this.defaults.headers.authorization = null
 }
 
 export default axiosInstance

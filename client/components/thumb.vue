@@ -1,21 +1,23 @@
-<template lang="pug">
-    nuxt-link(:to="`/post/${post.postid}`")
-        .post-content
-            .gradient
-                .overlay
-                    span.comment
-                        | {{post.comments}}
-                        |
-                        Bubble
-                    span.votes
-                        | {{post.score}}
-                        |
-                        Heart
-            img.thumb(v-bind:src="`${address}/uploads/thumbs/${post.filename}.jpg`")
+<template>
+    <nuxt-link :to="`/post/${post.id}`">
+        <div class="post-content">
+            <div class="gradient">
+                <div class="overlay">
+                    <span class="comment"
+                        >{{ post.comment_count }} <Bubble></Bubble></span
+                    ><span class="votes">{{ post.score }} <Heart></Heart></span>
+                </div>
+            </div>
+            <img
+                class="thumb"
+                v-bind:src="`${address}/uploads/thumbs/${post.filename}.jpg`"
+            />
+        </div>
+    </nuxt-link>
 </template>
 
 <script>
-import { address } from "~/../shared/config"
+import { address } from "~/../config"
 import Heart from "~/components/heart"
 import Bubble from "~/components/bubble"
 

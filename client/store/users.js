@@ -1,4 +1,4 @@
-import axios from "~/plugins/axios"
+import axios from "../axios"
 
 export default {
     state() {
@@ -15,7 +15,7 @@ export default {
         async getUser({ commit }, id) {
             const { data } = await axios.get(`user/${id}`)
             if (!data.errno) {
-                commit("setUser", data.user)
+                commit("setUser", data)
             } else {
                 throw data
             }

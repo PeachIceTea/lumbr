@@ -1,5 +1,5 @@
 export default function({ store, redirect }) {
     if (store.state.auth.jwt) {
-        return redirect("/user/home")
+        return redirect("/")
     }
 }

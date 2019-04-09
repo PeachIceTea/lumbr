@@ -1,23 +1,35 @@
-import axios from "~/plugins/axios"
+import axios from "../axios"
 const jsCookie = process.client ? require("js-cookie") : undefined
 
 export default {
     state() {
         return {
+            error: null,
+            lastAuthType: "",
             jwt: "",
-            user: {},
+            id: 0,
+            name: "",
         }
     },
     mutations: {
-        setUser(state, auth) {
-            state.user = auth.user
+        login(state, data) {
+            state.jwt = data.token
+            state.id = data.user.id
+            state.name = data.user.name
         },
-        setJWT(state, jwt) {
-            state.jwt = jwt
-        },
-        logout(state) {
+        logout(state, data) {
             state.jwt = ""
-            state.user = {}
+            state.id = 0
+            state.name = ""
+        },
+        setLastAuthType(state, type) {
+            state.lastAuthType = type
+        },
+        setError(state, error) {
+            state.error = error
+        },
+        clearError(state) {
+            state.error = null
         },
     },
     actions: {
@@ -36,13 +48,14 @@ export default {
 }
 
 async function auth(commit, type, payload) {
+    commit("setLastAuthType", type)
     const { data } = await axios.post(`user/${type}`, payload)
-    if (!data.errno) {
-        jsCookie.set("auth", data.jwt)
-        axios.setToken(data.jwt)
-        commit("setJWT", data.jwt)
-        commit("setUser", data)
+    if (!data.error) {
+        jsCookie.set("auth", data.token)
+        axios.setToken(data.token)
+        commit("login", data)
     } else {
-        throw data
+        console.log(data)
+        commit("setError", data)
     }
 }

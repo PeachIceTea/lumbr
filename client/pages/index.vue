@@ -1,13 +1,16 @@
-<template lang="pug">
-    .index
-        .user-info(v-if="authenticated")
-            span Hi, {{this.$store.state.auth.user.name}}
-        .navigation
-            nuxt-link(to="/post") Posts
-            |
-            |
-            nuxt-link(to="/user/login" v-if="!authenticated") Login
-            span.logout-link(v-else @click="logout") Logout
+<template>
+    <div class="index">
+        <div class="auth">
+            <nuxt-link :to="'/user/auth'" v-if="!authenticated">
+                Login or Register
+            </nuxt-link>
+            <span v-else>
+                Hi, {{ username }}.
+                <span class="logout" @click="logout">Logout</span>
+            </span>
+        </div>
+        <nuxt-link :to="'/post'">Posts</nuxt-link>
+    </div>
 </template>
 
 <script>
@@ -16,21 +19,22 @@ export default {
         authenticated() {
             return !!this.$store.state.auth.jwt
         },
+        username() {
+            return this.$store.state.auth.name
+        },
     },
     methods: {
         logout() {
             this.$store.dispatch("auth/logout")
-            this.$router.push("/user/login")
         },
     },
 }
 </script>
 
-
 <style lang="less" scoped>
-.logout-link {
+.logout {
     color: blue;
-    cursor: pointer;
     text-decoration: underline;
+    cursor: pointer;
 }
 </style>

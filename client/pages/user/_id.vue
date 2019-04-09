@@ -1,11 +1,11 @@
-<template lang="pug">
-    .user-container
-        h1.name {{user.name}}
-        .since User since {{since}}
-        h1 Posts
-        .posts
-            .post(v-for="post in user.posts")
-                Thumb(:post="post")
+<template>
+    <div class="user">
+        <h1 class="name">{{ user.name }}</h1>
+        <div class="since">User since {{ since }}</div>
+        <div class="posts" v-for="post in user.posts" :key="post.id">
+            <Thumb :post="post" />
+        </div>
+    </div>
 </template>
 
 <script>

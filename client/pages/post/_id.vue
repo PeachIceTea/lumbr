@@ -1,27 +1,46 @@
-<template lang="pug">
-    .post
-        .image-container
-            img(:src="address + '/uploads/resized/' + post.filename + '.jpg'")
-        .info
-            div
-                | Uploaded by
-                |
-                nuxt-link.user(:to="'/user/' + post.userid") {{post.uploader}}
-            div Score: {{post.score}}
-            .comments
-                .comment(v-for="comment in post.comments")
-                    nuxt-link.user(:to="'/user/' + comment.userid") {{comment.name}}
-                    .content {{comment.content}}
-                .new-comment(v-if="authenticated")
-                    br
-                    div Write a new comment
-                    textarea.new-comment-text(v-model="newComment")
-                    input(type="submit" @click="submitComment")
-            nuxt-link(:to="'/post'") Back to posts
+<template>
+    <div class="post">
+        <div class="image-container">
+            <img
+                :src="address + '/uploads/resized/' + post.filename + '.jpg'"
+            />
+        </div>
+        <div class="info">
+            <div>
+                Uploaded by
+                <nuxt-link class="user" :to="'/user/' + post.user_id">
+                    {{ post.username }}
+                </nuxt-link>
+            </div>
+            <div>Score: {{ post.score }}</div>
+            <div class="comments">
+                <div
+                    class="comment"
+                    v-for="comment in post.comments"
+                    :key="comment.id"
+                >
+                    <nuxt-link class="user" :to="'/user/' + comment.user_id">
+                        {{ comment.username }}
+                    </nuxt-link>
+                    <div class="content">{{ comment.content }}</div>
+                </div>
+                <div class="new-comment" v-if="authenticated">
+                    <br />
+                    <div>Write a new comment</div>
+                    <textarea
+                        class="new-comment-text"
+                        v-model="newComment"
+                    ></textarea
+                    ><input type="submit" @click="submitComment" />
+                </div>
+            </div>
+            <nuxt-link :to="'/post'">Back to posts</nuxt-link>
+        </div>
+    </div>
 </template>
 
 <script>
-import { address } from "~/../shared/config"
+import { address } from "~/../config"
 
 export default {
     validate({ params }) {
