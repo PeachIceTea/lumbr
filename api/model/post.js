@@ -18,7 +18,12 @@ Post.prototype.toJSON = function() {
 }
 
 const post = {
-    _getSelectQuery({ queryOne = false, limit = 19, offset = 0, user = "" }) {
+    _getSelectQuery({
+        queryOne = false,
+        limit = config.posts_per_page,
+        offset = 0,
+        user = "",
+    }) {
         return `SELECT post.*, user.name AS username,
         0 AS score,
         (SELECT COUNT(1) FROM comment WHERE comment.id = post.id) AS comment_count

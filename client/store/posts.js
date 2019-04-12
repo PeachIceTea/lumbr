@@ -26,8 +26,8 @@ export default {
         },
     },
     actions: {
-        async getPosts({ commit }) {
-            const { data } = await axios.get("post")
+        async getPosts({ commit }, page) {
+            const { data } = await axios.get(`post/page/${page}`)
             if (!data.errno) {
                 commit("setPosts", data)
             } else {

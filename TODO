@@ -1,0 +1,80 @@
+Server:
+    ✔ Rework error handling to a function that is called with an error code. @high @started(19-03-26 12:36) @done(19-03-26 13:06) @lasted(30m17s)
+    ✔ Either copy fastifys json response structure or overwrite the 500 and 404 functions @started(19-03-26 13:10) @done(19-03-26 13:14) @lasted(4m11s)
+    ✔ Turn parseInt() into Number() @started(19-03-26 13:59) @done(19-03-26 14:00) @lasted(1m54s)
+    for performance reasons (https://jsperf.com/parseint-vs-number/16)
+    ✔ Rename row/rows variables to what they actually represent @check @done(19-04-09 19:45)
+    Should be done? Gotta check!
+    ✔ Continue in try rather than only assigning variable there @done(19-04-09 19:45)
+    ☐ Don't return error code if an empty row is returned @maybe
+    Or atleast make sure its consitent across the api
+    ☐ Seperate client and server dependencies
+    ✔ Add startup script for client development in package.json @done(19-04-01 13:00)
+    Validate JWT on the server side during nuxtServerInit @started(19-04-01 13:00) @done(19-04-03 20:41) @lasted(2d7h41m1s)
+    ☐ Rework JWT strategy
+    We should have two tokens. One long running one that can be invalidated on the server side using a database and is to be used to get the second token.
+
+    Rework the SQL queries:
+        ✔ They should be in a central location, so that all routes reflect the same information and queries aren't copied around. @done(19-04-09 19:45)
+        ☐ Rename comments to comment_count @maybe
+        Right now comments is used to indicate the amount of comments as well as acutally being an array of comments.
+
+    Users:
+    /user/:id route:
+        ✔ List latest posts @started(19-03-26 13:44) @done(19-03-26 13:51) @lasted(7m11s)
+        ✔ List latest comments @done(19-03-26 14:40)
+        ✔ List latest favorites @done(19-03-26 19:43)
+
+    General:
+        ☐ List posts in /user/:id/posts @started(19-03-26 13:19)
+        ☐ List votes in /user/:id/votes @low
+        ☐ List favorites in /user/:id/favorites
+        ☐ List comments in /user/:id/comments
+        ✔ Allow to change password @done(19-03-27 09:18)
+
+    Posts:
+        ☐ Add vote system
+        ☐ Add favorite system
+        ☐ Add tag system
+
+    Nice to haves:
+        ☐ Devide files into folders of 100 pictures each for better io performance @low
+
+    Comments:
+        ✔ Basic implementation @done(19-04-03 21:26)
+            ✔ new @started(19-03-26 14:01) @done(19-03-26 14:17) @lasted(16m46s)
+            ✔ List comments @started(19-03-26 14:18) @done(19-03-26 19:25) @lasted(5h7m9s)
+            ✔ Get specific comment in relation to post (/post/:id/comment/:cid) @done(19-03-26 14:50)
+            ☐ edit
+        ☐ Vote system @low
+
+Client:
+    ✔ Login @done(19-04-01 13:01)
+    ✔ Post creation @done(19-04-09 19:44)
+    ☐ Voting
+    ☐ Finish user page
+    ☐ Navigation
+    ☐ Make it pretty
+
+    Page view:
+        ☐  Make amount of pictures dynamic
+        Currently there is only a hardcoded amount of posts that are being displayed on each page. It would be cool if the amount of space available on each device would be send before rendering to send the right amount of posts over.
+        Alternatively we can send a big chunk of posts over and have the client split them up onto multiple pages, loading a new chunk whenever they are running dry with post information.
+        The issue with both of these approaches would be that the page  numbers would not be consistent over various devices. It would probably be better if the rows would only split themselves up in way divisible by 20.
+
+    Post view:
+        ☐ Sacle images
+
+    Auth:
+        ☐ Don't redirect when login fails
+
+    Comments:
+        ✔ Comment creation @started(19-04-03 20:47) @done(19-04-03 21:26) @lasted(39m47s)
+        ☐ Show when comments were created and if they were edited and when
+
+    Optimization:
+        ☐ Move all API request to its own file @maybe
+        https://codeburst.io/nuxt-authentication-from-scratch-a7a024c7201b (search for frontend/api/index.js)
+        ☐ Investigate client side caching @low
+        The client keeps a timestamp on all data it recieves and sends requests with that timestamp.
+        The server then will only send new information to the client. Might be worth a shot.

@@ -8,6 +8,15 @@ module.exports = async function(fastify, options) {
         return await Post.getPage(0)
     })
 
+    fastify.get("/page/:id", async req => {
+        const id = Number(req.params.id)
+        if (!isNaN(id)) {
+            return await Post.getPage(id)
+        } else {
+            return errors.fp_id_invalid
+        }
+    })
+
     fastify.get("/:id", async req => {
         const id = Number(req.params.id)
         if (id) {

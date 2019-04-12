@@ -1,37 +1,40 @@
 <template>
-    <div class="posts-container">
-        <div class="intro">
-            <span>Lumbar</span>
-            <br />
-            <nuxt-link :to="'post/upload'">Upload a new image</nuxt-link>
-        </div>
-        <div class="post" v-for="post in posts" :key="post.id">
-            <Thumb :post="post" />
-        </div>
-        <div class="navigation">
-            <nuxt-link
-                :to="`/post/page/${page - 1}`"
-                @click="previous"
-                v-if="!(page && page === 1)"
-                tag="div"
-                class="next nav-button"
-            >
-                Previous page
-            </nuxt-link>
-            <nuxt-link
-                :to="`/post/page/${page + 1}`"
-                tag="div"
-                class="next nav-button"
-            >
-                Next page
-            </nuxt-link>
-        </div>
+  <div class="posts-container">
+    <div class="intro">
+      <span>Lumbar</span>
+      <br>
+      <nuxt-link :to="'post/upload'">Upload a new image</nuxt-link>
     </div>
+    <div class="post" v-for="post in posts" :key="post.id">
+      <Thumb :post="post"/>
+    </div>
+    <div class="navigation">
+      <nuxt-link
+        :to="`/page/${+page - 1}`"
+        v-if="!(page && page === 1)"
+        tag="div"
+        class="next nav-button"
+      >Previous page</nuxt-link>
+      <nuxt-link
+        :to="`/page/${+page + 1}`"
+        v-if="posts.length === post_per_page"
+        tag="div"
+        class="next nav-button"
+      >Next page</nuxt-link>
+    </div>
+  </div>
 </template>
 
 <script>
 import Thumb from "~/components/thumb"
+import config from "../../config"
+
 export default {
+    data() {
+        return {
+            post_per_page: config.posts_per_page,
+        }
+    },
     computed: {
         posts() {
             return this.$store.state.posts.posts

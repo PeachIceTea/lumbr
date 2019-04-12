@@ -1,42 +1,29 @@
 <template>
-    <div class="post">
-        <div class="image-container">
-            <img
-                :src="address + '/uploads/resized/' + post.filename + '.jpg'"
-            />
-        </div>
-        <div class="info">
-            <div>
-                Uploaded by
-                <nuxt-link class="user" :to="'/user/' + post.user_id">
-                    {{ post.username }}
-                </nuxt-link>
-            </div>
-            <div>Score: {{ post.score }}</div>
-            <div class="comments">
-                <div
-                    class="comment"
-                    v-for="comment in post.comments"
-                    :key="comment.id"
-                >
-                    <nuxt-link class="user" :to="'/user/' + comment.user_id">
-                        {{ comment.username }}
-                    </nuxt-link>
-                    <div class="content">{{ comment.content }}</div>
-                </div>
-                <div class="new-comment" v-if="authenticated">
-                    <br />
-                    <div>Write a new comment</div>
-                    <textarea
-                        class="new-comment-text"
-                        v-model="newComment"
-                    ></textarea
-                    ><input type="submit" @click="submitComment" />
-                </div>
-            </div>
-            <nuxt-link :to="'/post'">Back to posts</nuxt-link>
-        </div>
+  <div class="post">
+    <div class="image-container">
+      <img :src="address + '/uploads/resized/' + post.filename + '.jpg'">
     </div>
+    <div class="info">
+      <div>
+        Uploaded by
+        <nuxt-link class="user" :to="'/user/' + post.user_id">{{ post.username }}</nuxt-link>
+      </div>
+      <div>Score: {{ post.score }}</div>
+      <div class="comments">
+        <div class="comment" v-for="comment in post.comments" :key="comment.id">
+          <nuxt-link class="user" :to="'/user/' + comment.user_id">{{ comment.username }}</nuxt-link>
+          <div class="content">{{ comment.content }}</div>
+        </div>
+        <div class="new-comment" v-if="authenticated">
+          <br>
+          <div>Write a new comment</div>
+          <textarea class="new-comment-text" v-model="newComment"></textarea>
+          <input type="submit" @click="submitComment">
+        </div>
+      </div>
+      <nuxt-link :to="'/post'">Back to posts</nuxt-link>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -90,8 +77,10 @@ export default {
 }
 
 img {
-    width: 100%;
+    max-height: 100vh;
+    max-width: 75vw;
     height: auto;
+    width: auto;
 }
 
 .comments {
@@ -108,10 +97,6 @@ img {
 }
 
 @media only screen and (min-device-width: 768px) {
-    img {
-        height: 1fr;
-    }
-
     .post {
         grid-template-columns: 0.75fr 0.25fr;
     }

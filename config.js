@@ -19,8 +19,9 @@ const config = {
     },
     password_rounds: 11,
     secret: 'THIS IS A super SAFE secret_!sadknhj" Promise :)',
-    address: "http://192.168.0.5:3000",
+    address: "http://localhost:3000",
     accepted_mime: ["image/png", "image/jpeg"],
+    posts_per_page: 16,
 }
 
 module.exports = config
