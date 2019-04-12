@@ -1,11 +1,11 @@
 <template>
-    <div class="user">
-        <h1 class="name">{{ user.name }}</h1>
-        <div class="since">User since {{ since }}</div>
-        <div class="posts" v-for="post in user.posts" :key="post.id">
-            <Thumb :post="post" />
-        </div>
+  <div class="user">
+    <h1 class="name">{{ user.name }}</h1>
+    <div class="since">User since {{ since }}</div>
+    <div class="posts">
+      <Thumb v-for="post in user.posts" :key="post.id" :post="post"/>
     </div>
+  </div>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <Nuxt />
+  <Nuxt/>
 </template>
 
 <script>
@@ -23,5 +23,14 @@ export default {}
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+}
+
+svg {
+    display: inline-flex;
+    align-self: center;
+    height: 0.8em;
+    width: 0.8em;
+    top: 0.05em;
+    position: relative;
 }
 </style>

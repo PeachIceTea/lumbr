@@ -55,7 +55,7 @@ const post = {
     },
     async getForUser(user, offset) {
         return await db.queryMany(
-            this._getSelectQuery({ offset, user: user.id }),
+            this._getSelectQuery({ offset, limit: 5, user: user.id }),
             [user.id]
         )
     },

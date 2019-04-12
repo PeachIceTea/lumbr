@@ -55,19 +55,6 @@ export default {
     display: inline-block;
 }
 
-img {
-    vertical-align: bottom;
-}
-
-svg {
-    display: inline-flex;
-    align-self: center;
-    height: 0.8em;
-    width: 0.8em;
-    top: 0.05em;
-    position: relative;
-}
-
 .navigation {
     display: flex;
     justify-content: center;

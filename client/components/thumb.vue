@@ -1,19 +1,21 @@
 <template>
-    <nuxt-link :to="`/post/${post.id}`">
-        <div class="post-content">
-            <div class="gradient">
-                <div class="overlay">
-                    <span class="comment"
-                        >{{ post.comment_count }} <Bubble></Bubble></span
-                    ><span class="votes">{{ post.score }} <Heart></Heart></span>
-                </div>
-            </div>
-            <img
-                class="thumb"
-                v-bind:src="`${address}/uploads/thumbs/${post.filename}.jpg`"
-            />
+  <nuxt-link :to="`/post/${post.id}`">
+    <div class="post-content">
+      <div class="gradient">
+        <div class="overlay">
+          <span class="comment">
+            {{ post.comment_count }}
+            <Bubble></Bubble>
+          </span>
+          <span class="votes">
+            {{ post.score }}
+            <Heart></Heart>
+          </span>
         </div>
-    </nuxt-link>
+      </div>
+      <img class="thumb" v-bind:src="`${address}/uploads/thumbs/${post.filename}.jpg`">
+    </div>
+  </nuxt-link>
 </template>
 
 <script>
@@ -34,6 +36,10 @@ export default {
 
 
 <style lang="less" scoped>
+img {
+    vertical-align: bottom;
+}
+
 .post {
     display: inline-block;
 }
