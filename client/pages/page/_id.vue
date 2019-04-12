@@ -1,7 +1,7 @@
 <template>
-  <div class="post-index">
-    <PostPage :page="$route.params.id"/>
-  </div>
+    <div class="post-index">
+        <PostPage :page="$route.params.id" />
+    </div>
 </template>
 
 <script>

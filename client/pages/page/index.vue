@@ -1,7 +1,7 @@
 <template>
-  <div class="post-index">
-    <PostPage :page="1"/>
-  </div>
+    <div class="post-index">
+        <PostPage :page="1" />
+    </div>
 </template>
 
 <script>

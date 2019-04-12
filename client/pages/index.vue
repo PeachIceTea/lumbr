@@ -1,14 +1,16 @@
 <template>
-  <div class="index">
-    <div class="auth">
-      <nuxt-link :to="'/user/auth'" v-if="!authenticated">Login or Register</nuxt-link>
-      <span v-else>
-        Hi, {{ username }}.
-        <span class="logout" @click="logout">Logout</span>
-      </span>
+    <div class="index">
+        <div class="auth">
+            <nuxt-link :to="'/user/auth'" v-if="!authenticated">
+                Login or Register
+            </nuxt-link>
+            <span v-else>
+                Hi, {{ username }}.
+                <span class="logout" @click="logout">Logout</span>
+            </span>
+        </div>
+        <nuxt-link :to="'/page'">Posts</nuxt-link>
     </div>
-    <nuxt-link :to="'/page'">Posts</nuxt-link>
-  </div>
 </template>
 
 <script>
